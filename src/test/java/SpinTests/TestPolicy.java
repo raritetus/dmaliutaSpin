@@ -8,6 +8,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +17,13 @@ import java.util.List;
 public class TestPolicy extends WebDriverSettings{
     @Test
     public void authTest() throws InterruptedException {
-        driver.get("https://te2-gapps1.spinbackup.com/");
+        driver.get("https://te3-gapps1.spinbackup.com/");
         Utility.captureScreenshot(driver, "Login");
+
+
+        Logger logger = LoggerFactory.getLogger(TestPolicy.class);
+        logger.info("This is first step in my logging");
+
 
         //Login-password
         driver.findElement(By.name("login")).sendKeys("suser@asbru.cloud");
