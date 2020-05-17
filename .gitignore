@@ -3,4 +3,5 @@
 /build/
 /out/
 /out/test/classes/
-/src/test/java/screenshots/
+src/test/java/screenshots
+/logs/

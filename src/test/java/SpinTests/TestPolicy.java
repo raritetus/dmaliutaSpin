@@ -17,26 +17,33 @@ import java.util.List;
 public class TestPolicy extends WebDriverSettings{
     @Test
     public void authTest() throws InterruptedException {
+        Logger logger = LoggerFactory.getLogger(TestPolicy.class);
+        logger.info("####################### TEST STARTED #####################");
+
         driver.get("https://te3-gapps1.spinbackup.com/");
         Utility.captureScreenshot(driver, "Login");
 
-
-        Logger logger = LoggerFactory.getLogger(TestPolicy.class);
-        logger.info("This is first step in my logging");
-
-
-        //Login-password
-        driver.findElement(By.name("login")).sendKeys("suser@asbru.cloud");
-        driver.findElement(By.name("password")).sendKeys("Icq449515376");
-
-        driver.findElement(By.className("signin")).click();
-
-        Utility.captureScreenshot(driver, "Loginerr");
-
         WebDriverWait wait = new WebDriverWait(driver, 10);
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("storage-chart")));
+        logger.info("Login STARTED");
 
+        try
+        {
+            //Login-password
+            driver.findElement(By.name("login")).sendKeys("suser@asbru.cloud");
+            driver.findElement(By.name("password")).sendKeys("Icq449515376");
+
+            driver.findElement(By.className("signin")).click();
+
+            Utility.captureScreenshot(driver, "Loginerr");
+
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("storage-chart")));
+        }
+        catch(Exception e)
+        {
+            logger.info("Login FAILED");
+            close();
+        }
 
         WebElement securityPolices = driver.findElement(By.cssSelector("[href=\"/app/security-policy\"]"));
         securityPolices.click();
@@ -63,6 +70,8 @@ public class TestPolicy extends WebDriverSettings{
             listPolicyString.add(webElement.getText());
         }
 
+        logger.info("Got policies list");
+
         driver.findElement(By.cssSelector("[href=\"/app/security-policy\"]")).click();
 
         //policy creation
@@ -71,8 +80,8 @@ public class TestPolicy extends WebDriverSettings{
         {
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("CreateRule-BTN")));
 
-            System.out.println("loop " + item);
-
+            //System.out.println("loop " + item);
+            logger.info("Creation policy " + item);
             driver.findElement(By.className("CreateRule-BTN")).click();
 
             //step 1
@@ -121,6 +130,7 @@ public class TestPolicy extends WebDriverSettings{
             }
 
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class=\"mt0 sb-btn sb-collapse fs16\"]")));
+            logger.info("Creation " + item + " SUCCESSFUL");
             Utility.captureScreenshot(driver, item.toString());
         }
 
@@ -129,15 +139,19 @@ public class TestPolicy extends WebDriverSettings{
         driver.findElement(By.xpath("(//a[@href='/app/monitor'])[2]")).click();
         String domainAudit = driver.findElement(By.xpath("//dt[contains(@class,'mt5 ml5')]")).getText();
         Assert.assertEquals(domainAudit,"Domain Audit");
+        logger.info("Assertion 1 DONE");
 
 
         driver.findElement(By.xpath("//a[@href='/app/security']")).click();
         String securitySettings = driver.findElement(By.tagName("h1")).getText();
         Assert.assertEquals(securitySettings,"Security Settings");
+        logger.info("Assertion 2 DONE");
 
         driver.findElement(By.cssSelector("[href=\"/app/security-policy\"]")).click();
 
         //deletion
+
+        logger.info("Start policies deletion");
 
         WebElement checkBox = driver.findElement(By.className("col-xs-1"));
         WebElement box = checkBox.findElement(By.tagName("label"));
@@ -157,5 +171,11 @@ public class TestPolicy extends WebDriverSettings{
 
         String ruleHasBeen = driver.findElement(By.xpath("//div[@data-role='message']")).getText();
         Assert.assertEquals(ruleHasBeen, "Rule has been successful removed");
+
+        logger.info("Deletion SUCCESSFUL");
+        logger.info("TEST STATUS: SUCCESS");
+        logger.info("========================== TEST END ==========================");
     }
 }
+
+
