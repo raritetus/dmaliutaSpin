@@ -1,6 +1,4 @@
 # Project exclude paths
-/.gradle/
-/build/
 /out/
 /out/test/classes/
 /src/test/java/screenshots
