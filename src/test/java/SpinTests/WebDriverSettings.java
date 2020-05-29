@@ -14,11 +14,9 @@ public class WebDriverSettings {
         System.setProperty("webdriver.chrome.driver", "/Users/dmalyuta/IdeaProjects/SpinBackup/src/test/resources/drivers/chromedriver");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");
-        //options.setHeadless(true);
         options.addArguments("window-size=1280,800");
         driver = new ChromeDriver(options);
     }
-
 
     @After
     public void close()
